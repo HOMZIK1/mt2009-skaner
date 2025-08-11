@@ -1,0 +1,25 @@
+{
+  "fps": 4.0,
+  "roi_width": 520,
+  "roi_height": 300,
+  "margin_x": 30,
+  "margin_y": 30,
+  "dedup_seconds": 2.0,
+  "window_title_filter": "NEWMT2",
+  "tesseract_path": "C:\\Program Files\\Tesseract-OCR\\tesseract.exe",
+  "log_dir": "./logs_market",
+  "keywords": [
+    "księga umiejętności",
+    "pergamin",
+    "kamień duszy +4",
+    "ulepszacz",
+    "ulepszacze"
+  ],
+  "language": "pol+eng",
+  "auto_update_on_start": true,
+  "update_version_url": "https://raw.githubusercontent.com/HOMZIK1/mt2009-skaner/main/version.json",
+  "github_repo": "HOMZIK1/mt2009-skaner",
+  "github_token": "",
+  "auto_publish_watch_folder": "",
+  "auto_publish_enabled": false
+}

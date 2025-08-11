@@ -1,36 +1,40 @@
-name: Build and Release
+name: Build Windows EXE
 
 on:
+  workflow_dispatch:          # ręczne odpalanie z zakładki Actions
+  release:
+    types: [published]        # odpala się, gdy opublikujesz Release
   push:
-    tags:
-      - 'v*'
+    tags: ['v*']              # i/lub gdy wypchniesz tag
 
 jobs:
   build:
     runs-on: windows-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pyinstaller
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
 
-    - name: Build EXE
-      run: |
-        pyinstaller --onefile --noconsole your_script.py
-      shell: cmd
+      - name: Build EXE
+        run: |
+          pyinstaller -F -w mt_market_scanner_gui.py -n MTScanner
 
-    - name: Upload Release Asset
-      uses: softprops/action-gh-release@v1
-      with:
-        files: dist/your_script.exe
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Zip update payload
+        run: |
+          powershell Compress-Archive -Path dist\MTScanner.exe, config.json, roi_calibrator.py, updater.py, assets -DestinationPath update.zip
+
+      - name: Publish Release assets
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/MTScanner.exe
+            update.zip
